@@ -1,0 +1,98 @@
+URL SHORTNER -> Create the short version of an URL
+
+Server Side Rendring  -> It is when the full html page gets render from the server side and it is fast even google do the SSR for its google.com But still the UI in google.com is less and the client page for some other things contains a lot of things like css its responsiveness, routes and all and then our sever will becomd busy in handling the UI part for this we need to create the seprate html file for this we got some engines which will do this work some Templates engine like . EJS (Embeded Java script), pug and handleBars etc so -> npm i ejs
+
+
+
+Authentication in nodejs -> Authentication has 2 pattern statefull and stateless
+
+StateFull :
+
+1)In stateful authentication, the server maintains session data for each user.
+
+2)When a user logs in with username & password, the server:
+
+3)Authenticates the user by verifying credentials.
+
+4)Creates a Session ID (UID) and sends it to the client (usually stored in cookies If it is SSR and Authorization header when the restApi's).
+
+5)Stores this Session ID on the server (in memory, DB, or session store like Redis).
+
+6)On every request, the client sends the Session ID, and the server:
+
+7)Validates the session Id,
+
+8)Retrieves user info, checks authorization (permission to access the data or not), and responds accordingly.
+
+9)Common in traditional web apps using frameworks like Express.js, Django, or Spring.
+
+Problems in statefull - if server refresh/restarts then  all the users get logged out,Statefull authentication is memory intensive and user server memory and server has limited memory  for handling this we have stateless authentication 
+
+Client Calls the server then we gonna have the middleware check if the Session or UID is valid if yes then call next or else return the res from there itself
+npm i uuid  -> for genetating the session id's
+
+
+Authentication we performed in this app works like : so authentication me server check karke ki login ki time mai db me regiseterd hu ki nahi aur uske baad wo mujhe ek uid dega jo kinda authorization kaam karegi ki ye valid h to isko ye response do so like ki agar user schema me ek aur  feild ho ki isAdmin aur maine vo authentication me user detail fethc kara ke token ke saath map karke user ki browser me store karwa di to fir baadme server ki har request me para rahega ki ye particular user admin h ya nahi kyoki local ram me uid se user ki infor mapped h to isse vo valid content dekh sakta h
+
+
+
+
+
+STATELESS AUTHENTICATION ->Stateless authentication means the server doesn’t store any user session data. Instead, all the necessary info (like user identity) is stored in a token — usually a JWT (JSON Web Token) — which is sent by the client with every request. The server verifies the token and processes the request, making it scalable and easier to manage in distributed systems.
+SO jwt consist of header , payload(contains the user info), and verify signature combining these 3 an encoded token will e generated and sent to the user and user sent this token on every request
+
+npm i jsonwebtoken 
+
+
+
+ARCHITECTURE OF AUTHENTICATION  -> first user login in the server via email and password then server validate the user and create the jwt token consist of header payload and signature and then set it in cookie and send to the browser and the browser's default behaviour is to store the cooke and then every request after it consit of cookie as cookie comes along in the request by default and we can also check wehter the token in the cookie is valid via verify it with secret we used to sign the token with and if valid then we proceeds the request
+
+
+User Login:
+The user sends login credentials (email & password) to the server.
+
+Validation:
+The server verifies the credentials against the database.
+
+Token Generation:
+On successful login, the server creates a JWT token that includes:
+
+Header: Algorithm & token type
+
+Payload: User ID, email, role, etc.
+
+Signature: Signed using a secret key
+
+Set Cookie:
+The server sets the JWT in an HTTP-only cookie and sends it back in the response.
+
+Browser Storage:
+The browser automatically stores the cookie (default behavior).
+
+Subsequent Requests:
+The cookie (with the JWT) is automatically sent with every request to the server.
+
+Token Verification:
+The server reads the JWT from the cookie, verifies it using the same secret key, and if valid, processes the request.
+
+Access Control:
+Based on the token payload (like role or ID), protected routes can be accessed.
+
+
+
+Cookies are domain  specific -> suppose user login in facebook then in return it gives some cookies and  went to amazon.in then again in return it sends some cookies to then in total user browser has cookies from facebook and amazon Now if user request on facebook then only facebook specific cookies will go in reuqest and same for amazon
+
+Cookies are domain-specific. The browser ensures that only the cookies belonging to the requested domain are sent along, making cross-site isolation secure by default.and  we can also change the domain of the cookie   res.cookie("uid",token,{domain:"www.google.com"}).Cookie domain can be set to a parent or subdomain you control (like .example.com), but you can’t assign it to third-party domains due to browser security restrictions.
+
+Response tokens ->  we can set it to authorization headers  the tokens we get in response 
+
+
+cookie  -> Only for browser and response headers for all types of applications
+
+
+
+
+Authorization and Authentication
+
+Authentication  -> Autehnticate the user (loggin) like a user belongs to  application
+Authorization  -> To check wether you're authorized to access to the particular resource

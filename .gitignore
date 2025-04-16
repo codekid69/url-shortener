@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Environment variables (don't commit your .env file)
+.env
+
+# Logs
+*.log
+
+# Build or output directories (if any)
+build/
+dist/
+
+# Temporary files from editors (VS Code, IntelliJ, etc.)
+.vscode/
+.idea/
+
+# OS generated files (macOS/Windows)
+.DS_Store
+Thumbs.db
+
+# npm package-lock file (if you're using Yarn, add yarn.lock)
+package-lock.json
+
+# Coverage folder (for testing results)
+coverage/
+
+# Optional: For temporary swap or backup files
+*.swp
+*.swo
+*.bak

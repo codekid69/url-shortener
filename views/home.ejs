@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #f1f1f1;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+
+        .delete-btn {
+            background-color: #ff4e50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #e63946;
+        }
+
+        .notification {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .error-notification {
+            background-color: #f44336;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #333;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .username {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .logout-btn {
+            background-color: #ff4e50;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e63946;
+        }
+
+        .main-title {
+            text-align: center;
+            margin-top: 40px;
+            color: #4f8cff;
+            font-size: 38px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #444;
+            border-radius: 8px 0 0 8px;
+            background-color: #2b2b2b;
+            color: #fff;
+            width: 50%;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4f8cff;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            background-color: #4f8cff;
+            color: #fff;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #376edc;
+        }
+
+        .urls-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            padding: 20px;
+            margin: 12px 0;
+            background-color: #2b2b2b;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+        }
+
+        li a {
+            text-decoration: none;
+            color: #4f8cff;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        .analytics-section {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #222;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .show-analytics-btn,
+        .hide-analytics-btn {
+            padding: 10px 20px;
+            background-color: #4f8cff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .show-analytics-btn:hover,
+        .hide-analytics-btn:hover {
+            background-color: #376edc;
+        }
+
+        .hide-analytics-btn {
+            background-color: #ff3b3b;
+        }
+
+        .no-visits {
+            color: #ff3b3b;
+            font-style: italic;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #333;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4f8cff;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .username {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            padding: 8px 16px;
+            background-color: #2b2b2b;
+            border-radius: 8px;
+        }
+
+        .logout-btn {
+            background-color: #ff4e50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e63946;
+        }
+
+        @media (max-width: 800px) {
+            header {
+                flex-direction: column;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="notification" class="notification"></div>
+    <!-- Header with user info -->
+    <header>
+        <div class="logo">URL Shortener</div>
+        <div class="username">Welcome, <%= user.name %>
+        </div>
+        <form method="post" action="/logout">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </header>
+
+
+    <form method="post" action="/url">
+        <input type="text" name="url" placeholder="Enter URL to shorten" required>
+        <button type="submit">Shorten</button>
+    </form>
+
+    <div class="urls-container">
+        <ul>
+            <% Urls.forEach((url)=> { %>
+                <li id="url-<%= url.shortId %>">
+                    <strong>Short ID:</strong>
+                    <a href="/url/<%= url.shortId %>" target="_blank">
+                        <%= url.shortId %>
+                    </a>
+                    <br>
+                    <strong>Original URL:</strong>
+                    <%= url.redirectUrl %>
+                        <br>
+                        <strong>Click Count:</strong>
+                        <%= url.visitHistory.length %>
+
+                            <!-- View Analytics Button -->
+                            <button class="show-analytics-btn" onclick="toggleAnalytics('<%= url.shortId %>')">View
+                                Analytics</button>
+                            <button class="delete-btn" onclick="deleteUrl('<%= url.shortId %>')">Delete</button>
+
+                            <!-- Analytics Section -->
+                            <div id="analytics-<%= url.shortId %>" class="analytics-section">
+                                <% if (url.visitHistory.length===0) { %>
+                                    <div class="no-visits">No visits yet</div>
+                                    <% } else { %>
+                                        <ul>
+                                            <% url.visitHistory.forEach((visit)=> {
+                                                const visitDate = new Date(visit.timestamp);
+                                                const formattedDate = visitDate.toLocaleString('en-GB', {
+                                                weekday: 'short',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                second: 'numeric',
+                                                });
+                                                %>
+                                                <li>Visited on: <%= formattedDate %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                        <% } %>
+                                            <button class="hide-analytics-btn"
+                                                onclick="toggleAnalytics('<%= url.shortId %>')">Hide Analytics</button>
+                            </div>
+                </li>
+                <% }) %>
+        </ul>
+
+    </div>
+
+    <script>
+        async function generateUrl() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value;
+
+            if (!url) {
+                alert('Please provide a redirect URL.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url }),
+                });
+
+                const result = await response.json();
+
+                if (result.message === 'URL created successfully') {
+                    // Refresh the page after URL creation
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Error generating URL:', error);
+                alert('Error generating URL.');
+            }
+        }
+        function toggleAnalytics(shortId) {
+            const analyticsSection = document.getElementById('analytics-' + shortId);
+            const showBtn = document.querySelector(`button.show-analytics-btn[onclick*="${shortId}"]`);
+            const hideBtn = analyticsSection.querySelector('.hide-analytics-btn');
+
+            if (analyticsSection.style.display === 'none' || analyticsSection.style.display === '') {
+                analyticsSection.style.display = 'block';
+                if (showBtn) showBtn.style.display = 'none';
+                if (hideBtn) hideBtn.style.display = 'inline-block';
+            } else {
+                analyticsSection.style.display = 'none';
+                if (showBtn) showBtn.style.display = 'inline-block';
+                if (hideBtn) hideBtn.style.display = 'none';
+            }
+        }
+        async function deleteUrl(shortId) {
+            try {
+                const response = await fetch(`/url/${shortId}`, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Error response:", errorData);
+                    alert(`Error: ${errorData.message}`);
+                    return;
+                }
+
+                const result = await response.json();
+                console.log("Deleted successfully:", result);
+                alert("URL deleted successfully");
+
+                // Dynamically remove the URL from the DOM
+                const urlElement = document.getElementById(`url-${shortId}`);
+                if (urlElement) {
+                    urlElement.remove(); // Removes the specific list item from the DOM
+                }
+            } catch (error) {
+                console.error("Network error while deleting URL", error);
+                alert("Network error while deleting URL");
+            }
+        }
+
+
+
+        // Function to show notifications
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.remove('error-notification', 'success');
+            notification.classList.add(type === 'error' ? 'error-notification' : 'success');
+            notification.style.display = 'block';
+
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+
+</body>
+
+</html>
