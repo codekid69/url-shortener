@@ -320,22 +320,22 @@
                                     <div class="no-visits">No visits yet</div>
                                     <% } else { %>
                                         <ul>
-                                            <% url.visitHistory.forEach((visit)=> {
+                                            <% url.visitHistory.forEach((visit) => {
                                                 const visitDate = new Date(visit.timestamp);
                                                 const formattedDate = visitDate.toLocaleString('en-GB', {
-                                                weekday: 'short',
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric',
-                                                second: 'numeric',
+                                                    weekday: 'short',
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: 'numeric',
+                                                    second: 'numeric',
+                                                    timeZone: 'Asia/Kolkata', // specify the correct timezone
                                                 });
-                                                %>
-                                                <li>Visited on: <%= formattedDate %>
-                                                </li>
-                                                <% }) %>
-                                        </ul>
+                                            %>
+                                                <li>Visited on: <%= formattedDate %></li>
+                                            <% }) %>
+                                            
                                         <% } %>
                                             <button class="hide-analytics-btn"
                                                 onclick="toggleAnalytics('<%= url.shortId %>')">Hide Analytics</button>
