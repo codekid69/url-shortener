@@ -3,8 +3,8 @@ const router = express.Router();
 const Url = require('../model/url');
 const { restrictToLoggedInUser } = require('../middleware/auth');
 router.get('/', restrictToLoggedInUser, async (req, res) => {
-    console.log("inside home rest",req.user.isAdmin);
-    const userId = req.user._id;  // Assuming req.user has the user details
+    console.log("inside home rest",req.user);
+    const userId = req.user.id;  // Assuming req.user has the user details
     if(req.user.isAdmin==false){
         const urls = await Url.find({ createdBy: userId });
         return res.render("home", { Urls: urls , user:req.user});

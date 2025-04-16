@@ -7,11 +7,12 @@ function setUser(user) {
 
     // creating the tokens
     // creating payload with user info for the token 
-    console.log(user)
+    console.log("getting user for token",user)
     const payload = {
         id: user._id, 
         name: user.name,
         email: user.email, 
+        isAdmin:user.isAdmin
         // add more fields if needed, but keep it minimal and non-sensitive
     };
     return jwt.sign(payload, secretKey);  // (payload,secrectKey for signing the token)

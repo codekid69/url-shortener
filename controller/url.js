@@ -14,7 +14,7 @@ async function generateURl(req, res) {
         shortId,
         redirectUrl: body.url,
         visitHistory: [],
-        createdBy: req.user._id
+        createdBy: req.user.id
     });
     return res.redirect('/');
 }
